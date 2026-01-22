@@ -1,6 +1,6 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { Post, Service, SiteSettings, ViewType } from '../types';
+import { Post, Service, SiteSettings, ViewType } from '../types.ts';
 
 interface AppContextType {
   posts: Post[];
@@ -69,19 +69,26 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [posts, setPosts] = useState<Post[]>(() => {
-    const saved = localStorage.getItem('unfold_posts');
-    return saved ? JSON.parse(saved) : defaultPosts;
+    try {
+      const saved = localStorage.getItem('unfold_posts');
+      return saved ? JSON.parse(saved) : defaultPosts;
+    } catch (e) {
+      return defaultPosts;
+    }
   });
 
   const [settings, setSettings] = useState<SiteSettings>(() => {
-    const saved = localStorage.getItem('unfold_settings');
-    const parsed = saved ? JSON.parse(saved) : defaultSettings;
-    if (!parsed.services) parsed.services = defaultSettings.services;
-    // Ensure social links are updated to the new structure if loading from cache
-    if (!parsed.socialLinks) {
-        parsed.socialLinks = defaultSettings.socialLinks;
+    try {
+      const saved = localStorage.getItem('unfold_settings');
+      const parsed = saved ? JSON.parse(saved) : defaultSettings;
+      if (!parsed.services) parsed.services = defaultSettings.services;
+      if (!parsed.socialLinks) {
+          parsed.socialLinks = defaultSettings.socialLinks;
+      }
+      return parsed;
+    } catch (e) {
+      return defaultSettings;
     }
-    return parsed;
   });
 
   const [currentView, setCurrentView] = useState<ViewType>('home');
