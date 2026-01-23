@@ -15,6 +15,7 @@
             color: #ffffff;
             scroll-behavior: smooth;
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
         ::-webkit-scrollbar {
             width: 8px;
@@ -35,37 +36,59 @@
             text-shadow: 0 0 15px rgba(249, 115, 22, 0.5);
         }
 
-        /* Light Movement & Graphics Animations - Speeds improved by ~10% */
-        @keyframes drift-1 {
-            0% { transform: translate(-10%, -10%) scale(1); }
-            50% { transform: translate(20%, 15%) scale(1.1); }
-            100% { transform: translate(-10%, -10%) scale(1); }
+        /* Animations */
+        @keyframes flow-bg {
+            0% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.3; }
+            33% { transform: translate(5%, -5%) scale(1.1) rotate(2deg); opacity: 0.5; }
+            66% { transform: translate(-3%, 7%) scale(1.05) rotate(-1deg); opacity: 0.4; }
+            100% { transform: translate(0, 0) scale(1) rotate(0deg); opacity: 0.3; }
         }
-        @keyframes drift-2 {
-            0% { transform: translate(15%, 20%) scale(1.2); }
-            50% { transform: translate(-15%, -10%) scale(1); }
-            100% { transform: translate(15%, 20%) scale(1.2); }
+
+        @keyframes fold-sweep {
+            0% { transform: translateX(-100%) skewX(-45deg); opacity: 0; }
+            50% { opacity: 0.1; }
+            100% { transform: translateX(100%) skewX(-45deg); opacity: 0; }
         }
-        @keyframes shimmer {
-            0% { opacity: 0; transform: translateX(-50%) translateY(-50%) rotate(-45deg); }
-            50% { opacity: 0.15; }
-            100% { opacity: 0; transform: translateX(50%) translateY(50%) rotate(-45deg); }
+
+        @keyframes pulse-soft {
+            0%, 100% { opacity: 0.2; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.05); }
         }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+
+        /* Spotlight Animation */
+        @keyframes spotlight-move {
+            0% { transform: translate(-20%, -20%); }
+            33% { transform: translate(10%, 10%); }
+            66% { transform: translate(-10%, 20%); }
+            100% { transform: translate(-20%, -20%); }
         }
-        @keyframes pulse-slow {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 0.7; }
+
+        /* Cinematic Beam Sweep */
+        @keyframes beam-sweep {
+            0% { transform: rotate(-45deg) translateX(-100%); opacity: 0; }
+            50% { opacity: 0.3; }
+            100% { transform: rotate(-45deg) translateX(100%); opacity: 0; }
         }
+
+        .animate-flow { animation: flow-bg 20s ease-in-out infinite; }
+        .animate-fold-sweep { animation: fold-sweep 15s linear infinite; }
+        .animate-pulse-soft { animation: pulse-soft 8s ease-in-out infinite; }
+        .animate-spotlight { animation: spotlight-move 20s ease-in-out infinite; }
+        .animate-beam { animation: beam-sweep 12s ease-in-out infinite; }
         
-        /* Duration reduced by 10% (e.g., 25s -> 22.7s) */
-        .animate-drift-1 { animation: drift-1 22.7s ease-in-out infinite; }
-        .animate-drift-2 { animation: drift-2 27.3s ease-in-out infinite; }
-        .animate-shimmer { animation: shimmer 10.9s linear infinite; }
-        .animate-float { animation: float 5.4s ease-in-out infinite; }
-        .animate-pulse-slow { animation: pulse-slow 3.6s ease-in-out infinite; }
+        /* Gradient Mesh Background */
+        .bg-mesh {
+            background: radial-gradient(circle at 20% 30%, #1a1a1a 0%, transparent 50%),
+                        radial-gradient(circle at 80% 70%, #0d0d0d 0%, transparent 50%),
+                        radial-gradient(circle at 50% 50%, #000000 0%, #050505 100%);
+        }
+
+        /* Glassmorphism utility */
+        .glass {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
     </style>
 <script type="importmap">
 {
@@ -78,9 +101,8 @@
 }
 </script>
 </head>
-<body>
+<body class="bg-mesh">
     <div id="root"></div>
-    <!-- Entry point for the application -->
     <script type="module" src="index.tsx"></script>
 </body>
 </html>
